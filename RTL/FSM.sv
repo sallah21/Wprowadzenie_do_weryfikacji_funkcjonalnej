@@ -1,4 +1,4 @@
-module fsm #(
+module FSM #(
     parameter STATE_WIDTH = 3
 ) (
     input logic clk,          
@@ -15,7 +15,8 @@ module fsm #(
         STATE_3   = 3'b011    
     } state_t;
 
-    state_t current_state, next_state;
+    state_t current_state = STATE_0;
+    state_t next_state;
 
     always_ff @(posedge clk ) begin
         if (!run)
