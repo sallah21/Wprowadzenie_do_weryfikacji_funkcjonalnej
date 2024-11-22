@@ -20,9 +20,9 @@ integer i=0;
 
 reg [FIFO_width-1:0] FIFO [FIFO_depth-1:0];
 
-reg [FIFO_pntr_w-1:0] top ;
-reg [FIFO_pntr_w-1:0] btm ;
-reg [FIFO_cntr_w-1:0] cnt ;
+reg [FIFO_pntr_w-1:0] top;
+reg [FIFO_pntr_w-1:0] btm;
+reg [FIFO_cntr_w-1:0] cnt;
 
 always @(posedge clk or negedge FIFO_clr_n) begin
     if (! FIFO_clr_n) begin
@@ -40,16 +40,16 @@ always @(posedge clk or negedge FIFO_clr_n) begin
     end
     else begin
             case ({push,pop})
-            2'b10: begin
+            2'b10: begin // write 
                 FIFO [top] <= data_in;
                 top <= top +1;
                 cnt <= cnt +1;
-            end 
+            end // read
             2'b01: begin
                 btm <= btm +1;
                 cnt <= cnt -1;
             end 
-            2'b11: begin
+            2'b11: begin // both
                 FIFO[top] <= data_in;
                 btm <= btm +1;
                 top <= top +1;

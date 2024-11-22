@@ -17,7 +17,13 @@ if [ $? -eq 1 ]; then
     exit 1
 fi
 
-gtkwave fifo_sim.vcd
+
+
+gtkwave FIFO_TB.gtkw
+if [ $? -eq 1 ]; then
+    echo gtk wave error 
+    exit 1
+fi
 
 echo "All tests completed successfully"
 
