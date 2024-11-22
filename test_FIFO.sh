@@ -1,55 +1,25 @@
 #!/bin/bash
 
-rm -f fif
-rm -f *.cf
-rm -f *.json
-rm -f *.vhdl
+rm -f FIFO_TB
 
 clear
-
-# Compile SystemVerilog
-echo "Compiling SystemVerilog..."
-iverilog -Wall -s FIFO -o fif RTL/FIFO.sv
+iverilog -Wall -s FIFO_tb -o FIFO_TB RTL/FIFO.sv VERIF/FIFO_tb.sv
 
 if [ $? -eq 1 ]; then
-    echo "SystemVerilog compilation failure"
+    echo Source compilation failure
     exit 1
 fi
 
-# Convert to VHDL using Yosys and GHDL
-echo "Converting to VHDL..."
-yosys -s convert.ys
+vvp FIFO_TB
+
 if [ $? -eq 1 ]; then
-    echo "Yosys conversion failure"
+    echo Simulation failure
     exit 1
 fi
 
-ghdl synth --std=08 --out=vhdl -e FIFO FIFO_netlist.json > FIFO_converted.vhdl
-if [ $? -eq 1 ]; then
-    echo "GHDL synthesis failure"
-    exit 1
-fi
+gtkwave fifo_sim.vcd
 
-# Analyze and elaborate VHDL files
-echo "Analyzing VHDL files..."
-ghdl -a --std=08 FIFO_converted.vhdl
-ghdl -a --std=08 VERIF/tb_tab.vhdl
+echo "All tests completed successfully"
 
-if [ $? -eq 1 ]; then
-    echo "VHDL analysis failure"
-    exit 1
-fi
 
-echo "Elaborating..."
-ghdl -e --std=08 fifo_tb
 
-if [ $? -eq 1 ]; then
-    echo "VHDL elaboration failure"
-    exit 1
-fi
-
-# Run simulation
-echo "Running simulation..."
-ghdl -r --std=08 fifo_tb --wave=wave.ghw
-
-echo "Simulation complete. Use gtkwave wave.ghw to view waveforms"

@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module FIFO #(
     parameter FIFO_depth = 16,
     parameter FIFO_width = 8,
