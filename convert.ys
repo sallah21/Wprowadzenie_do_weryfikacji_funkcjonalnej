@@ -1,0 +1,8 @@
+read_verilog -sv RTL/FIFO.sv       # Read the Verilog module
+hierarchy -check -top FIFO      # Specify the top module
+proc                                   # Flatten processes
+opt
+memory
+techmap
+opt
+write_json FIFO_netlist.json             # Output as JSON

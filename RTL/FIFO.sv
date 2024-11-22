@@ -1,6 +1,6 @@
 module FIFO #(
-    parameter FIFO_depth = 8,
-    parameter FIFO_width = 4,
+    parameter FIFO_depth = 16,
+    parameter FIFO_width = 8,
     parameter FIFO_pntr_w = 4,
     parameter FIFO_cntr_w = 4
 ) (
